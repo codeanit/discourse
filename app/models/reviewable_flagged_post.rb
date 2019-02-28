@@ -10,21 +10,23 @@ class ReviewableFlaggedPost < Reviewable
     return unless pending?
     return if post.blank?
 
-    build_action(actions, :agree_and_keep, 'thumbs-up')
+    agree = actions.add_bundle("#{id}-agree", icon: 'thumbs-up', label: 'reviewables.actions.agree.title')
+
+    build_action(actions, :agree_and_keep, icon: 'thumbs-up', bundle: agree)
 
     if post.user_deleted?
-      build_action(actions, :agree_and_restore, 'far-eye')
+      build_action(actions, :agree_and_restore, icon: 'far-eye', bundle: agree)
     elsif !post.hidden?
-      build_action(actions, :agree_and_hide, 'far-eye-slash')
+      build_action(actions, :agree_and_hide, icon: 'far-eye-slash', bundle: agree)
     end
 
     if post.hidden?
-      build_action(actions, :disagree_and_restore, 'thumbs-down')
+      build_action(actions, :disagree_and_restore, icon: 'thumbs-down')
     else
-      build_action(actions, :disagree, 'thumbs-down')
+      build_action(actions, :disagree, icon: 'thumbs-down')
     end
 
-    build_action(actions, :ignore, 'external-link-alt')
+    build_action(actions, :ignore, icon: 'external-link-alt')
   end
 
   def perform_ignore(performed_by, args)
@@ -189,10 +191,10 @@ class ReviewableFlaggedPost < Reviewable
 
 protected
 
-  def build_action(actions, id, icon)
-    actions.add(id) do |action|
+  def build_action(actions, id, icon:, bundle: nil)
+    actions.add(id, bundle: bundle) do |action|
       action.icon = icon
-      action.title = "reviewables.actions.#{id}.title"
+      action.label = "reviewables.actions.#{id}.title"
       action.description = "reviewables.actions.#{id}.description"
     end
   end

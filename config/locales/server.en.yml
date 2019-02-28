@@ -4304,6 +4304,8 @@ en:
     missing_version: "You must supply a version parameter"
     conflict: "There was an update conflict preventing you from doing that."
     actions:
+      agree:
+        title: "Agree..."
       agree_and_keep:
         title: "Keep Post"
         description: "Agree with flag and keep the post unchanged."
